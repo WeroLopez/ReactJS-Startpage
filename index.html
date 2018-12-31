@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <body>
+    <div id="root" class="center"></div>
+    <script src="https://unpkg.com/react@15.4.2/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.4.2/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+
+    <script type="text/babel">
+      const backgroundImageCant = 20 + 1;
+
+      function Background(props) {
+        var hms = [];
+        hms[0] = Math.round(props.date.getHours() * 11.08);
+        hms[1] = Math.round(props.date.getMinutes() * 4.32);
+        hms[2] = Math.round(props.date.getSeconds() * 4.32);
+        for (let i = 0; i < 3; i++) {
+          hms[i] = hms[i] > 255 ? 'FF' : hms[i].toString(16);
+          hms[i] = hms[i].length < 2 ? '0' + hms[i] : hms[i];
+        }
+        const hexHour = hms[0] +''+ hms[1] +''+ hms[2];
+        document.body.style.backgroundColor = '#'+hexHour;
+        return (
+          <div className="whiteText">
+            <h1>Hello, ReactJS!</h1>
+            <h2>{props.date.toLocaleTimeString()} </h2>
+            <h2>#{hexHour.toUpperCase()} </h2>
+          </div>
+        );
+      }
+
+      function RandomBackgroundImage(props){
+        const rand = parseInt(Math.random() * (backgroundImageCant-1) + 1);
+        const url = "background-images/" + rand;
+        const img = new Image();
+        img.src = url + ".jpg";
+        document.body.style.backgroundImage = "url('" + url + ".jpg')";
+        img.onerror = function(){
+          document.body.style.backgroundImage = "url('" + url + ".png')";
+        }
+        return (
+          <div></div>
+        );
+      }
+
+      class Clock extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {date: new Date()};
+        }
+
+        componentDidMount() {
+          this.timerID = setInterval(
+            () => this.tick(),
+            1000
+          );
+        }
+
+        componentWillUnmount() {
+          clearInterval(this.timerID);
+        }
+
+        tick() {
+          this.setState({
+            date: new Date()
+          });
+        }
+
+        render() {
+          return (
+            <Background date = {this.state.date}></Background>
+          );
+        }
+      }
+
+      class Bookmark extends React.Component {
+        render(){
+          return (
+            <div className={this.props.classname}>
+              <a href={this.props.url}>
+                <img className='image' src={this.props.src}/>
+              </a>
+            </div>
+          );
+        }
+      }
+
+      class BookmarksContainer extends React.Component {
+        render(){
+          return(
+            <div className="container">
+              <div style={{margin: '0 auto'}}>
+                <Bookmark classname='imageDiv' url='https://facebook.com' src='icons/facebook.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://instagram.com' src='icons/instagram.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://twitter.com' src='icons/twitter.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://translate.google.com' src='icons/traductor.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://mail.google.com' src='icons/gmail.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://amazon.com.mx' src='icons/amazon.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://thepiratebay.rocks' src='icons/thepiratebay.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://messenger.com' src='icons/messenger.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://web.whatsapp.com' src='icons/whatsapp.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://4chan.org' src='icons/4chan.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://drive.google.com' src='icons/drive.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://outlook.live.com' src='icons/outlook.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://mercadolibre.com.mx' src='icons/mercadolibre.png'></Bookmark>
+                <Bookmark classname='imageDiv' url='https://flaticon.com' src='icons/flaticon.png'></Bookmark>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class SearchBar extends React.Component{
+        constructor(props) {
+          super(props);
+          this.handleEnterUp = this.handleEnterUp.bind(this);
+        }
+
+        handleEnterUp (event) {
+          if(event.key == 'Enter'){
+            const url = this.props.actionUrl + document.getElementById(this.props.name).value;
+            window.open(url, '_blank');
+            document.getElementById(this.props.name).value = '';
+          }
+        }
+
+        render(){
+          return (
+            <div style={{overflow: 'auto', padding: '16px 0'}}>
+                <input id={this.props.name} className="textfield" tabIndex={this.props.tab}
+                autoComplete="off" onKeyUp={this.handleEnterUp}
+                spellCheck="false" type="text" name={this.props.name}/>
+            </div>
+          );
+        }
+      }
+
+      class SearchBarContainer extends React.Component{
+        render(){
+          return (
+            <div className="searchbar">
+              <div style={{margin: '0 auto', width: '50%', height: '75px'}} className="redBorder">
+                <Bookmark classname={this.props.classname}
+                  url={this.props.bookmarkUrl} src={this.props.src}></Bookmark>
+                <SearchBar tab={this.props.tab} name={this.props.name} actionUrl={this.props.actionUrl}/>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class DaysToGo extends React.Component {
+        render(){
+          const msDay = 60*60*24*1000;
+          const today = new Date();
+          const date = new Date(2018, 11, 7);
+          const days = Math.floor((date - today) / msDay) + 1;
+          return (
+            <div className="daystogo">
+              <div className="whiteText">
+                <h1 style={{margin: '10px 0 0 0', fontSize: '30px'}}>Faltan</h1>
+                <h1 style={{margin: '-5px 0 -5px 0', fontSize: '70px'}}>{days}</h1>
+                <h1 style={{margin: '0 0 15px 0', fontSize: '20px'}}>días para:</h1>
+              </div>
+              <img src="images/yourExpectedDayHere.png" style={{width: "75%"}}></img>
+            </div>
+          );
+        }
+      }
+
+      class Whole extends React.Component {
+        render(){
+          return (
+            <div>
+              <RandomBackgroundImage />
+              <Clock />
+              <br/><br/>
+              <SearchBarContainer classname='imageSearchBar' name='googleSearch'
+                actionUrl='http://google.com/search?q=' tab='1'
+                bookmarkUrl='http://google.com' src='icons/google.png'/>
+              <SearchBarContainer classname='imageSearchBar' name='youtubeSearch'
+                actionUrl='https://www.youtube.com/results?search_query=' tab='2'
+                bookmarkUrl='https://youtube.com/feed/subscriptions' src='icons/youtube.png'/>
+              <br/><br/><br/><br/><br/>
+              <BookmarksContainer />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <Whole />,
+        document.getElementById('root')
+      );
+    </script>
+
+  </body>
+</html>

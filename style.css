@@ -1,0 +1,77 @@
+html, body {
+  min-height: 100%;
+}
+body {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+.center {
+  margin: 0 auto;
+  text-align: center;
+}
+.whiteText {
+  font-family: Helvetica;
+  color: white;
+}
+.imageDiv {
+  /*width+margin = 14.28*/
+  margin-right: 3.1%;
+  margin-left: 3.1%;
+  margin-bottom: 6%;
+  width: 8.08%;
+  height: 90px;
+  float: left;
+}
+.container {
+  margin: 0 auto;
+  width: 55%;
+  overflow: auto;
+}
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.searchbar {
+  margin: 0 auto;
+  margin-bottom: .5%;
+  width: 55%;
+  overflow: auto;
+}
+.textfield {
+  float: left;
+  width: 95%;
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid white;
+  background-color: rgb(255, 255, 255, 0);
+  color: white;
+  font-size: 20px;
+  font-family: Helvetica;
+  text-align: center;
+}
+.textfield:focus {
+  outline: none;
+}
+.imageSearchBar {
+  margin-right: 2%;
+  width: 20%;
+  height: 70px;
+  float: left;
+}
+.daystogo {
+  position:absolute;
+  top:0;
+  right:0;
+  overflow: auto;
+  width: 18%;
+  /*border: 4px dashed red;*/
+}
+.daystogo2 {
+  position:absolute;
+  top: 400px;
+  right:0;
+  overflow: auto;
+  width: 18%;
+}
